@@ -1,1 +1,48 @@
-{"title": "hourcodeSwarm", "ios": {}, "dependencies": {"devkit-scene": "git@github.com:gameclosure/devkit-scene.git#f4314783905957c5cccaf42c98346a152e96c6eb", "devkit-core": "git@github.com:gameclosure/devkit-core.git#ee462077c22ee82c6edf1d37c16348b813f0e4be"}, "studio": {"domain": "student02.js.io", "stagingDomain": "staging.example.com", "name": "Your Studio Name"}, "appID": "8e10c2494ad64d60b66e18a3473fc95b", "android": {}, "shortName": "hourcodeSwarm", "supportedOrientations": ["portrait", "landscape"]}
+{
+  "addons": {},
+  "android": {
+    "icons": {
+      "114": "resources/icons/114.png",
+      "144": "resources/icons/144.png",
+      "36": "resources/icons/36.png",
+      "48": "resources/icons/48.png",
+      "57": "resources/icons/57.png",
+      "72": "resources/icons/72.png",
+      "96": "resources/icons/96.png"
+    },
+    "versionCode": 1
+  },
+  "appID": "17ecdd20a3c84db68f8c79050a9acf8c",
+  "dependencies": {
+    "devkit-core": "https://github.com/gameclosure/devkit-core#v4.2.1",
+    "devkit-entities": "https://github.com/gameclosure/devkit-entities.git#v0.5.3",
+    "devkit-parallax": "https://github.com/gameclosure/devkit-parallax#v0.3.5"
+  },
+  "icon": "resources/icons/512.png",
+  "ios": {
+    "icons": {
+      "114": "resources/icons/114.png",
+      "144": "resources/icons/144.png",
+      "36": "resources/icons/36.png",
+      "48": "resources/icons/48.png",
+      "57": "resources/icons/57.png",
+      "72": "resources/icons/72.png",
+      "96": "resources/icons/96.png"
+    },
+    "versionCode": 1
+  },
+  "shortName": "swarm",
+  "splash": {
+    "autoHide": true,
+    "universal": "resources/splash/splash.png"
+  },
+  "studio": {
+    "domain": "weeby.co",
+    "name": "Weeby.co"
+  },
+  "supportedOrientations": [
+    "portrait"
+  ],
+  "title": "Drone Swarm",
+  "version": "1.0.0"
+}
