@@ -22,10 +22,10 @@ exports = {
 		isCircle: true,
 		vx: 0,
 		vy: -0.25,
-		hitBounds: {
+		hitOpts: {
 			x: 0,
 			y: 10,
-			r: PLAYER_SIZE / 3
+			radius: PLAYER_SIZE / 3
 		},
 		viewBounds: {
 			x: -PLAYER_SIZE / 2,
@@ -35,7 +35,7 @@ exports = {
 		},
 		offsetX: BG_WIDTH / 2,
 		offsetY: BG_HEIGHT - 1.5 * PLAYER_SIZE,
-		inputMoveMultiplier: 1.5,
+		inputMoveMultiplieradius: 1.5,
 		rollMagnitude: 20,
 		bankMagnitude: 12
 	},
@@ -44,7 +44,7 @@ exports = {
 		isCircle: false,
 		vx: 0,
 		vy: -2,
-		hitBounds: {
+		hitOpts: {
 			x: -BULLET_WIDTH / 4,
 			y: -BULLET_HEIGHT / 4,
 			w: BULLET_WIDTH / 2,
@@ -67,10 +67,10 @@ exports = {
 				isCircle: true,
 				vx: 0,
 				vy: 0.4,
-				hitBounds: {
+				hitOpts: {
 					x: 0,
 					y: 0,
-					r: ENEMY_DRONE_SIZE / 2.5
+					radius: ENEMY_DRONE_SIZE / 2.5
 				},
 				viewBounds: {
 					x: -ENEMY_DRONE_SIZE / 2,
@@ -86,10 +86,10 @@ exports = {
 				isCircle: true,
 				vx: 0,
 				vy: 0.25,
-				hitBounds: {
+				hitOpts: {
 					x: 0,
 					y: 2,
-					r: ENEMY_MINE_SIZE / 3
+					radius: ENEMY_MINE_SIZE / 3
 				},
 				viewBounds: {
 					x: -ENEMY_MINE_SIZE / 2,
@@ -105,7 +105,7 @@ exports = {
 				isCircle: false,
 				vx: 0,
 				vy: 0.1,
-				hitBounds: {
+				hitOpts: {
 					x: -ENEMY_DEBRIS_WIDTH / 2,
 					y: -ENEMY_DEBRIS_HEIGHT / 2,
 					w: ENEMY_DEBRIS_WIDTH,
@@ -127,10 +127,10 @@ exports = {
 		{
 			id: "bg",
 			zIndex: 1,
-			xMultiplier: 0,
+			xMultiplieradius: 0,
 			xCanSpawn: false,
 			xCanRelease: false,
-			yMultiplier: 0.125,
+			yMultiplieradius: 0.125,
 			yCanSpawn: true,
 			yCanRelease: true,
 			yGapRange: [-1, -1],
@@ -157,10 +157,10 @@ exports = {
 		{
 			id: "farClouds",
 			zIndex: 2,
-			xMultiplier: 0,
+			xMultiplieradius: 0,
 			xCanSpawn: false,
 			xCanRelease: false,
-			yMultiplier: 0.2,
+			yMultiplieradius: 0.2,
 			yCanSpawn: true,
 			yCanRelease: true,
 			yGapRange: [200, 500],
@@ -200,10 +200,10 @@ exports = {
 		{
 			id: "midClouds",
 			zIndex: 3,
-			xMultiplier: 0,
+			xMultiplieradius: 0,
 			xCanSpawn: false,
 			xCanRelease: false,
-			yMultiplier: 0.4,
+			yMultiplieradius: 0.4,
 			yCanSpawn: true,
 			yCanRelease: true,
 			yGapRange: [400, 1000],
@@ -243,10 +243,10 @@ exports = {
 		{
 			id: "debrisFar",
 			zIndex: 4,
-			xMultiplier: 0,
+			xMultiplieradius: 0,
 			xCanSpawn: false,
 			xCanRelease: false,
-			yMultiplier: 0.6,
+			yMultiplieradius: 0.6,
 			yCanSpawn: true,
 			yCanRelease: true,
 			pieceOptions: [
@@ -300,10 +300,10 @@ exports = {
 		{
 			id: "debrisLeft",
 			zIndex: 5,
-			xMultiplier: 0,
+			xMultiplieradius: 0,
 			xCanSpawn: false,
 			xCanRelease: false,
-			yMultiplier: 0.8,
+			yMultiplieradius: 0.8,
 			yCanSpawn: true,
 			yCanRelease: true,
 			yGapRange: [0, 250],
@@ -329,10 +329,10 @@ exports = {
 		{
 			id: "debrisRight",
 			zIndex: 5,
-			xMultiplier: 0,
+			xMultiplieradius: 0,
 			xCanSpawn: false,
 			xCanRelease: false,
-			yMultiplier: 0.8,
+			yMultiplieradius: 0.8,
 			yCanSpawn: true,
 			yCanRelease: true,
 			yGapRange: [0, 250],

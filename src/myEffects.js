@@ -1,6 +1,6 @@
 import animate;
 
-import src.utils as utils;
+import src.myUtils as utils;
 
 var PI = Math.PI;
 var TAU = 2 * PI;
@@ -33,9 +33,8 @@ exports.emitExplosion = function(engine, entity) {
 	var size = 50;
 	var ttl = 350;
 	var stop = -1000 / ttl;
-	var vb = entity.viewBounds;
-	var x = entity.x + vb.x + (vb.w - size) / 2;
-	var y = entity.y + vb.y + (vb.h - size) / 2;
+	var x = entity.x;
+	var y = entity.y;
 	// define each particles trajectory
 	for (var i = 0; i < count; i++) {
 		var p = data[i];
@@ -74,9 +73,9 @@ exports.emitEpicExplosion = function(engine, entity) {
 	var size = 50;
 	var ttl = 600;
 	var stop = -1000 / ttl;
-	var vb = entity.viewBounds;
-	var x = entity.x + vb.x + (vb.w - size) / 2;
-	var y = entity.y + vb.y + (vb.h - size) / 2;
+	var vb = entity;
+	var x = entity.x + vb.x + (vb.viewWidth - size) / 2;
+	var y = entity.y + vb.y + (vb.viewHeight - size) / 2;
 	// define each particles trajectory
 	for (var i = 0; i < count; i++) {
 		var p = data[i];
