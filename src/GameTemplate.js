@@ -1,6 +1,8 @@
 import src.myEffects as effects;
 import scene, communityart, AudioManager;
 import ui.ParticleEngine as ParticleEngine;
+import src.Levels as Levels;
+import src.Enemies as Enemies;
 
 exports.init = function () {
     
@@ -31,6 +33,10 @@ exports.init = function () {
         zIndex: 15
     });
     particles.tick = particles.runTick;
+    
+    
+    this.levelUpdateTimeOut = 1000;
+    this.currentLevel = 0;
 }
 
 exports.run = function () {
@@ -38,8 +44,26 @@ exports.run = function () {
         buildPlayer();       
     }
     
+    var self = this;
     scene.onTick(function (dt) {
         scoreText.setText(scene.getScore());
+        
+        self.levelUpdateTimeOut -= dt;
+        if (self.levelUpdateTimeOut <= 0) {
+            var lv = self.currentLevel;
+            if (lv >= Levels.length) {
+                lv = 0;
+            }
+            
+            ++self.currentLevel;
+            if (self.currentLevel >= Levels.length) {
+                self.currentLevel = 0;
+            }
+            
+            self.levelUpdateTimeOut = 5000;
+            
+            Levels[lv]();            
+        }
     });
     
     scene.screen.onDown(function (point) {
@@ -73,7 +97,26 @@ exports.run = function () {
         audio.play('sfx_crash_b');
         killPlayer();
     });
+}
 
+exports.lazyGetImage = function(filename) {
+    filename = fixImageUrl(filename);
+    var artName = filename.replace(/\//g, '_');
+    
+    var loadedArt = communityart(artName);
+    if (loadedArt == null || loadedArt.type == null) {
+        communityart.registerConfig(artName, {
+            type: 'ImageView',
+            opts: {
+                viewOpts: {
+                    url: filename
+                }
+            }
+        });
+
+        loadedArt = communityart(artName);
+    }
+    return loadedArt;
 }
 
 var killPlayer = function () {
@@ -109,6 +152,14 @@ var fixAnimUrl = function (url) {
     }
     
     return url;
+}
+
+GLOBAL.setLevel = function (x) {
+    exports.currentLevel = x;
+}
+
+GLOBAL.wait = function (x) {
+    exports.levelUpdateTimeOut = x;
 }
 
 GLOBAL.setBackground = function (url) {
