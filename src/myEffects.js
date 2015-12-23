@@ -23,6 +23,41 @@ var SMOKE_IMAGES = [
 	"resources/images/particleSmoke6.png"
 ];
 
+exports.emitSmallHit = function(engine, entity) {
+	var count = 8;
+	var data = engine.obtainParticleArray(count);
+	var size = 30;
+	var ttl = 200;
+	var stop = -1000 / ttl;
+	var x = entity.x;
+	var y = entity.y;
+	// define each particles trajectory
+	for (var i = 0; i < count; i++) {
+		var p = data[i];
+		p.polar = true;
+		p.ox = x + rollFloat(-5, 5);
+		p.oy = y + rollFloat(-5, 5);
+		p.radius = rollFloat(-5, 5);
+		p.dradius = rollFloat(0, 400);
+		p.ddradius = stop * p.dradius;
+		p.theta = TAU * random();
+		p.r = TAU * random();
+		p.dr = rollFloat(-4, 4);
+		p.ddr = stop * p.dr;
+		p.anchorX = size / 2;
+		p.anchorY = size / 2;
+		p.width = size;
+		p.height = size;
+		p.scale = rollFloat(0.25, 2.5);
+		p.dscale = stop * p.scale;
+		p.ttl = ttl;
+		p.image = choose(SMOKE_IMAGES);
+		// the rare, non-blending smoke particle is cool
+		p.compositeOperation = random() < 0.95 ? "lighter" : "";
+	}
+	engine.emitParticles(data);
+};
+
 /**
  * emitExplosion
  * ~ general explosion effect
