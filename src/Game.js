@@ -14,9 +14,9 @@ exports = function () {
     setPlayerGunVelocity(300, -1500);
     
     setItemTime(5000);
-    addPowerUp('powerPinkBerry', 1);
-    addRecovery('powerBlueBerry', 1);
-    addTreasure('powerCoin', 1, 10);
+    addPowerUp('powerPinkBerry', 10);
+    addRecovery('powerBlueBerry', 10);
+    addTreasure('powerCoin', 10, 10);
     
     showScore();
     showLives();
