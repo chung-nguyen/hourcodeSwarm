@@ -24,6 +24,7 @@ exports = function () {
 	setBackgroundLayerSpeed('mid', 400);
     
     addPlayer('player1');
+	setPlayerLives(1);
     addPlayerGun('bullet-7');
     setPlayerGunRateOfFire(200);
     setPlayerGunVelocity(0, -1500);

@@ -102,12 +102,13 @@ exports.emitExplosion = function(engine, entity) {
  * ~ an over-the-top explosion effect, ideal for player death
  */
 exports.emitEpicExplosion = function(engine, entity) {
+	var timeScale = 10;
 	var count = 120;
 	var circle = count / 8;
 	var data = engine.obtainParticleArray(count);
 	var size = 50;
-	var ttl = 600;
-	var stop = -1000 / ttl;
+	var ttl = 600 * timeScale;
+	var stop = (-1000 / ttl) / timeScale;
 	var vb = entity;
 	var x = entity.x + vb.x + (vb.viewWidth - size) / 2;
 	var y = entity.y + vb.y + (vb.viewHeight - size) / 2;
@@ -126,8 +127,8 @@ exports.emitEpicExplosion = function(engine, entity) {
 			p.ox = x;
 			p.oy = y;
 			p.scale = 100;
-			p.dopacity = -1000 / 75;
-			p.ttl = 75;
+			p.dopacity = (-1000 / 75) / timeScale;
+			p.ttl = 75 * timeScale;
 		} else if (i < circle) {
 			// ring shape of particles defines the outer-most explosion
 			p.ox = x;
@@ -135,10 +136,10 @@ exports.emitEpicExplosion = function(engine, entity) {
 			p.r = TAU * i / circle + PI / 2;
 			p.theta = TAU * i / circle;
 			p.radius = 0;
-			p.dradius = 500;
-			p.ddradius = 40000;
+			p.dradius = 500 / timeScale;
+			p.ddradius = 40000 / timeScale;
 			p.scale = 0;
-			p.dscale = 8;
+			p.dscale = 8 / timeScale;
 			p.ttl = ttl;
 			p.transition = "easeOut";
 		} else {
@@ -148,10 +149,10 @@ exports.emitEpicExplosion = function(engine, entity) {
 			p.r = TAU * random();
 			p.theta = TAU * random();
 			p.radius = rollFloat(0, 30);
-			p.dradius = rollFloat(250, 750);
-			p.ddradius = rollFloat(25000, 75000);
+			p.dradius = rollFloat(250, 750) / timeScale;
+			p.ddradius = rollFloat(25000, 75000) / timeScale;
 			p.scale = 0;
-			p.dscale = rollFloat(0.5, 10);
+			p.dscale = rollFloat(0.5, 10) / timeScale;
 			p.ttl = ttl;
 		}
 	}

@@ -24,12 +24,18 @@ exports.init = function () {
     GLOBAL.audio = new AudioManager({
         path: 'resources/audio/',
         files: {
-            sfx_crash_c: {
+            bam: {
                 volume: 1.0
             },
-            sfx_crash_b: {
+            smash: {
                 volume: 1.0
             },
+			coin: {
+                volume: 1.0
+            },
+			fireburst: {
+                volume: 1.0
+            }
         }
     });
     
@@ -162,6 +168,8 @@ exports.run = function () {
 
         scene.onCollision(player, coins, function (player, coin) {
             if (coin.isEffective) {
+				audio.play('coin');
+				
                 animate(coin).now({
                     scale: 0,
                     dx: randRangeI(-100, 100),
@@ -175,6 +183,8 @@ exports.run = function () {
 
         scene.onCollision(player, powerUps, function (player, powerUp) {
             if (powerUp.isEffective) {
+				audio.play('coin');
+				
                 animate(powerUp).now({
                     scale: 0,
                     dx: randRangeI(-100, 100),
@@ -193,6 +203,8 @@ exports.run = function () {
 
         scene.onCollision(player, recoveries, function (player, recovery) {
             if (recovery.isEffective) {
+				audio.play('coin');
+				
                 animate(recovery).now({
                     scale: 0,
                     dx: randRangeI(-100, 100),
@@ -218,8 +230,7 @@ exports.run = function () {
         });
 
         scene.onCollision(player, enemybullets, function(player, enemybullet) {
-            enemybullet.destroy();
-            audio.play('sfx_crash_b');
+            enemybullet.destroy();            
             killPlayer();
         });
     }
@@ -228,12 +239,13 @@ exports.run = function () {
 var killEnenemy = function (enemy) {
 	enemy.lives--;
 	if (enemy.lives > 0) {
+		audio.play('smash');
 		effects.emitSmallHit(particles, enemy);
 	} else {
 		effects.emitExplosion(particles, enemy);
 		enemy.destroy();
 
-		audio.play('sfx_crash_c');
+		audio.play('bam');
 		scene.addScore(enemy.template.points);
 	}
 }
@@ -319,8 +331,10 @@ var killPlayer = function () {
     }
     
     if (player.lives > 0) {
+		audio.play('smash');
         effects.emitSmallHit(particles, player);
     } else {
+		audio.play('fireburst');
         effects.emitEpicExplosion(particles, player);
         effects.shakeScreen(scene.view);
         player.destroy();
