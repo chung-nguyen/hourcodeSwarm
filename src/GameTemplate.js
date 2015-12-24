@@ -73,34 +73,14 @@ exports.init = function () {
 	}];
 	
     this.itemTimeOut = itemTime;
-    
-    addEnemyTemplate('drone', 'enemyDrone');
-    setEnemyTemplateSpeed('drone', 20);
-    addEnemyTemplateGun('drone', 'bullet-4');
-	setEnemyTemplateGunInitialDelay('drone', 1000, 3000);
-	setEnemyTemplateGunRateOfFire(5);
-	setEnemyTemplateGunDirectional('drone', 0, 40);
-	
-	addEnemyTemplate('mine', 'enemyMine');
-	setEnemyTemplateSpeed('mine', 15);
-	
-	addEnemyTemplate('boss1', 'enemyBoss');
-	setEnemyTemplateAutoRotate('boss1', false);
-	setEnemyTemplateBoss('boss1');
-	setEnemyTemplateLives('boss1', 30);
-	setEnemyTemplateScore('boss1', 10);
-	setEnemyTemplateSpeed('boss1', 15);
-	addEnemyTemplateGun('boss1', 'bullet-5');
-	setEnemyTemplateGunRateOfFire('boss1', 20);
-	setEnemyTemplateGunSmart('boss1', 40);
 }
 
 exports.run = function () {
 	
 	var screenOffsetY = 0;
-	//if (parallaxConfig) {
+	if (parallaxConfig) {
 		this.parallax.reset(parallaxConfig);
-	//}
+	}
 
     if (playerConfig) {
         buildPlayer();       
@@ -293,6 +273,44 @@ exports.lazyGetImage = function(filename, collisionScale) {
     return loadedArt;
 }
 
+exports.lazyGetAnim = function(filename, collisionScale) {
+    filename = fixAnimUrl(filename);
+    var artName = filename.replace(/\//g, '_');
+    artName = artName.replace(/\./g, '_');
+    
+    var loadedArt = communityart(artName);
+    if (loadedArt == null || loadedArt.viewOpts == null) {
+        var img = new Image({
+            url: filename + '_idle_0001.png'
+        });
+        
+        w = img.getWidth();
+        h = img.getHeight();
+        
+        communityart.registerConfig(artName, {
+            type: 'default',
+            opts: {
+                hitOpts: {
+                    radius: w / 2 * (collisionScale || 1)
+                },
+                viewOpts: {
+                    url: filename,
+					defaultAnimation: 'idle',
+					autoStart: true,
+					loop: true,
+                    offsetX: -w / 2,
+                    offsetY: -h / 2,
+                    width: w,
+                    height: h
+                }
+            }
+        });
+
+        loadedArt = communityart(artName);
+    }
+    return loadedArt;
+}
+
 var killPlayer = function () {
     player.gunPower = 1;
     player.lives--;
@@ -323,7 +341,7 @@ var fixImageUrl = function (url) {
 
 var fixAnimUrl = function (url) {
     if (url.indexOf('/') < 0) {
-        url = 'resources/images/' + url;
+        url = 'resources/animation/' + url;
     }
     
     return url;
@@ -402,7 +420,7 @@ GLOBAL.addBackgroundLayer = function (name) {
 			xMultiplier: 0,
 			xCanSpawn: false,
 			xCanRelease: false,
-			yMultiplier: 0.125,
+			yMultiplier: 0,
 			yCanSpawn: true,
 			yCanRelease: true,
 			yGapRange: [-1, -1],
@@ -452,7 +470,7 @@ GLOBAL.setBackgroundLayerSpacing = function (name, min, max) {
 
 GLOBAL.addPlayer = function (url) {
     GLOBAL.playerConfig = {};
-    playerConfig.art = exports.lazyGetImage(url)
+    playerConfig.art = exports.lazyGetAnim(url)
     playerConfig.lives = 10;
     playerConfig.size = 96;
     playerConfig.speed = 100;
@@ -593,7 +611,7 @@ GLOBAL.addTreasure = function (image, speed, points) {
 
 GLOBAL.addEnemyTemplate = function (name, image) {
     enemyTemplates[name] = {
-        art: exports.lazyGetImage(image),
+        art: exports.lazyGetAnim(image),
         lives: 1,
 		points: 1,
         speed: 10,
