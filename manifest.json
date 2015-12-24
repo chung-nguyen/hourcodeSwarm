@@ -14,9 +14,10 @@
   },
   "appID": "17ecdd20a3c84db68f8c79050a9acf8c",
   "dependencies": {
-    "devkit-core": "https://github.com/gameclosure/devkit-core#v4.2.1",
+    "devkit-core": "https://github.com/gameclosure/devkit-core#76777f3175b2a03b1ac3e50d3eb506cfd28bd343",
     "devkit-entities": "https://github.com/gameclosure/devkit-entities.git#v0.5.3",
-    "devkit-parallax": "https://github.com/gameclosure/devkit-parallax#v0.3.5"
+    "devkit-parallax": "https://github.com/gameclosure/devkit-parallax#v0.3.5",
+    "devkit-scene": "git@github.com:gameclosure/devkit-scene.git#f4314783905957c5cccaf42c98346a152e96c6eb"
   },
   "icon": "resources/icons/512.png",
   "ios": {

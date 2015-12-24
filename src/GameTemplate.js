@@ -1,4 +1,5 @@
 import animate;
+import parallax.Parallax as Parallax;
 import src.myEffects as effects;
 import scene, communityart, AudioManager;
 import ui.ParticleEngine as ParticleEngine;
@@ -39,6 +40,9 @@ exports.init = function () {
     GLOBAL.recoveries = scene.addGroup();
     GLOBAL.coins = scene.addGroup();
     
+	GLOBAL.parallaxConfig = [];
+	GLOBAL.parallaxScrollSpeed = 1;
+	
     GLOBAL.powerUpConfig = null;
     GLOBAL.recoveryConfig = null;
     GLOBAL.coinConfig = null;
@@ -48,6 +52,12 @@ exports.init = function () {
     GLOBAL.livesText = null;
     GLOBAL.itemTime = 10000;
     GLOBAL.enemyTemplates = {};
+	
+	GLOBAL.player = null;
+	GLOBAL.techLevel = 0;
+	
+	// game background parallax
+	this.parallax = new Parallax({ parent: scene.background, zIndex: 0 });
     
     GLOBAL.particles = new ParticleEngine({
         parent: scene.stage,
@@ -66,23 +76,32 @@ exports.init = function () {
     
     addEnemyTemplate('drone', 'enemyDrone');
     setEnemyTemplateSpeed('drone', 20);
-    addEnemyTemplateGun('drone', 'laser');
+    addEnemyTemplateGun('drone', 'bullet-4');
 	setEnemyTemplateGunInitialDelay('drone', 1000, 3000);
 	setEnemyTemplateGunRateOfFire(5);
 	setEnemyTemplateGunDirectional('drone', 0, 40);
 	
+	addEnemyTemplate('mine', 'enemyMine');
+	setEnemyTemplateSpeed('mine', 15);
+	
 	addEnemyTemplate('boss1', 'enemyBoss');
 	setEnemyTemplateAutoRotate('boss1', false);
 	setEnemyTemplateBoss('boss1');
-	setEnemyTemplateLives('boss1', 10);
+	setEnemyTemplateLives('boss1', 30);
 	setEnemyTemplateScore('boss1', 10);
 	setEnemyTemplateSpeed('boss1', 15);
-	addEnemyTemplateGun('boss1', 'laser');
+	addEnemyTemplateGun('boss1', 'bullet-5');
 	setEnemyTemplateGunRateOfFire('boss1', 20);
 	setEnemyTemplateGunSmart('boss1', 40);
 }
 
 exports.run = function () {
+	
+	var screenOffsetY = 0;
+	//if (parallaxConfig) {
+		this.parallax.reset(parallaxConfig);
+	//}
+
     if (playerConfig) {
         buildPlayer();       
     }
@@ -92,47 +111,62 @@ exports.run = function () {
     var self = this;
     scene.onTick(function (dt) {
         scoreText && scoreText.setText(scene.getScore());        
+		
+		screenOffsetY += dt * parallaxScrollSpeed * 0.1;
+		self.parallax.update(0, screenOffsetY);
         
-		var lvStack = self.levelsStack[self.levelsStack.length - 1];
-		lvStack.levelUpdateTimeOut -= dt;
-		if (lvStack.levelUpdateTimeOut <= 0) {
-			var lv = lvStack.currentLevel;
-			if (lv >= lvStack.data.length) {
-				lv = 0;
-			}
-
-			++lvStack.currentLevel;
-			if (lvStack.currentLevel >= lvStack.data.length) {
-				lvStack.currentLevel = 0;
-			}
-
-			lvStack.levelUpdateTimeOut = 5000;
-			
-			lvStack.data[lv]();             
-		}
-		
-        if (lvStack.waitForBoss) {
-			var bossCount = 0;
-			enemies.forEachActiveEntity(function (enemy, i) {
-				if (enemy.template.isBoss) {
-					bossCount++;
+		if (player && player.lives > 0) {
+			var lvStack = self.levelsStack[self.levelsStack.length - 1];
+			lvStack.levelUpdateTimeOut -= dt;
+			if (lvStack.levelUpdateTimeOut <= 0) {
+				var lv = lvStack.currentLevel;
+				if (lv >= lvStack.data.length) {
+					lv = 0;
 				}
-			});
-			
-			if (bossCount <= 0) {	
-				lvStack.waitForBoss = false;
-				if (self.levelsStack.length > 1) {
-					self.levelsStack.length--;
+				
+				var willAddTechLevel = false;
+
+				++lvStack.currentLevel;
+				if (lvStack.currentLevel >= lvStack.data.length) {
+					lvStack.currentLevel = 0;
+					
+					if (self.levelsStack.length == 1) {
+						willAddTechLevel = true;						
+					}
+				}
+
+				lvStack.levelUpdateTimeOut = 5000;
+
+				lvStack.data[lv]();             
+				
+				if (willAddTechLevel) {
+					techLevel++;	
 				}
 			}
-        } 
-		
-        self.itemTimeOut -= dt;
-        if (self.itemTimeOut <= 0) {
-            self.itemTimeOut = itemTime;
-            
-            spawnPowerUp(randomX(40), -100);
-        }     
+
+			if (lvStack.waitForBoss) {
+				var bossCount = 0;
+				enemies.forEachActiveEntity(function (enemy, i) {
+					if (enemy.template.isBoss) {
+						bossCount++;
+					}
+				});
+
+				if (bossCount <= 0) {	
+					lvStack.waitForBoss = false;
+					if (self.levelsStack.length > 1) {
+						self.levelsStack.length--;
+					}
+				}
+			} 
+
+			self.itemTimeOut -= dt;
+			if (self.itemTimeOut <= 0) {
+				self.itemTimeOut = itemTime;
+
+				spawnPowerUp(randomX(40), -100);
+			}     	
+		}		
     });
     
     if (player) {
@@ -170,7 +204,7 @@ exports.run = function () {
                 player.gunPower++;
 				
 				for (var i = 0, len = playerBarrels.length; i < len; ++i) {
-					playerBarrels[i].cooldown = 0;
+					playerBarrels[i].cooldown = playerBarrels[i].initialDelay;
 				}
 				
                 powerUp.isEffective = false;
@@ -328,6 +362,8 @@ GLOBAL.runBossLevel = function (level) {
 		waitForBoss: true,
 		data: level
 	});
+	
+	console.log(exports.levelsStack.length);
 }
 
 GLOBAL.setBackground = function (url) {
@@ -339,11 +375,84 @@ GLOBAL.setBackground = function (url) {
     });
 
     scene.addBackground(communityart('background'));
+};
+
+GLOBAL.setBackgroundSpeed = function (speed) {
+	parallaxScrollSpeed = speed;
+};
+
+var findParallaxLayer = function (name) {
+	for (var i = 0, len = parallaxConfig.length; i < len; ++i) {
+		var l = parallaxConfig[i];
+		if (l.id == name) {
+			return l;
+		}
+	}
+	
+	return null;
 }
+
+GLOBAL.addBackgroundLayer = function (name) {
+	var layer = findParallaxLayer(name);
+	
+	if (layer == null) {
+		layer = {
+			id: name,
+			zIndex: 1,
+			xMultiplier: 0,
+			xCanSpawn: false,
+			xCanRelease: false,
+			yMultiplier: 0.125,
+			yCanSpawn: true,
+			yCanRelease: true,
+			yGapRange: [-1, -1],
+			ordered: true,
+			pieceOptions: []
+		};
+		
+		parallaxConfig.push(layer);
+	}
+	
+	for (var i = 1, len = arguments.length; i < len; ++i) {
+		layer.pieceOptions.push({
+			image: fixImageUrl(arguments[i])
+		});
+	}
+};
+
+GLOBAL.setBackgroundLayerRandom = function (name) {
+	var layer = findParallaxLayer(name);
+	if (layer) {
+		layer.ordered = false;
+	}
+}
+
+GLOBAL.setBackgroundLayerDistance = function (name, dist) {
+	var layer = findParallaxLayer(name);
+	if (layer) {
+		layer.zIndex = dist;
+	}
+};
+
+GLOBAL.setBackgroundLayerSpeed = function (name, speed) {
+	var layer = findParallaxLayer(name);
+	if (layer) {
+		layer.yMultiplier = speed * 0.001;
+	}
+};
+
+GLOBAL.setBackgroundLayerSpacing = function (name, min, max) {
+	var layer = findParallaxLayer(name);
+	if (layer) {
+		min = min || 0;
+		layer.yGapRange[0] = min;
+		layer.yGapRange[1] = max || min;
+	}
+};
 
 GLOBAL.addPlayer = function (url) {
     GLOBAL.playerConfig = {};
-    playerConfig.url = fixAnimUrl(url);
+    playerConfig.art = exports.lazyGetImage(url)
     playerConfig.lives = 10;
     playerConfig.size = 96;
     playerConfig.speed = 100;
@@ -413,6 +522,7 @@ GLOBAL.addPlayerGun = function (bulletImage) {
     var barrel = {
         art: exports.lazyGetImage(bulletImage),
         time: 60000 / 10,
+		initialDelay: 0,
         x: 0,
         y: 0,
         vx: 0,
@@ -422,6 +532,14 @@ GLOBAL.addPlayerGun = function (bulletImage) {
     };
 
     playerBarrels.push(barrel);   
+};
+
+GLOBAL.setPlayerGunInitialDelay = function (delay) {
+    if (playerBarrels.length > 0) {
+        var gun = playerBarrels[playerBarrels.length - 1];        
+        gun.initialDelay = delay;
+		gun.cooldown = delay;
+    }
 };
 
 GLOBAL.setPlayerGunRateOfFire = function (rateOfFire) {
@@ -609,7 +727,7 @@ GLOBAL.addEnemy = function (name, x, y, pathName) {
         });
         		
 		enemy.template = temp;
-        enemy.lives = temp.lives;
+        enemy.lives = temp.lives + techLevel;
 		enemy.pathIndex = 0;
 		enemy.startX = x;
 		enemy.startY = y;
@@ -692,6 +810,7 @@ GLOBAL.addEnemy = function (name, x, y, pathName) {
                     });    
                     
                     bullet.view.style.r = Math.atan2(-vx, vy);
+					bullet.view.style.flipY = true;
 
                     (function(bullet) {
                         if (vy < 0) {
@@ -726,7 +845,7 @@ GLOBAL.addEnemy = function (name, x, y, pathName) {
 
 var buildPlayer = function () {
     var size = playerConfig.size;
-    GLOBAL.player = scene.addPlayer(exports.lazyGetImage('player'), {
+    GLOBAL.player = scene.addPlayer(playerConfig.art, {
         zIndex: 51
     });
     
