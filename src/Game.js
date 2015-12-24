@@ -4,6 +4,7 @@ exports = function () {
 	addBackgroundLayer('bg', 'bg1b');
 	addBackgroundLayer('bg', 'bg1c');
 	addBackgroundLayer('bg', 'bg1d');
+	setBackgroundLayerSpeed('bg', 125);
 	
 	addBackgroundLayer('far', 'bg1FarDebris1');
 	addBackgroundLayer('far', 'bg1FarDebris2');
