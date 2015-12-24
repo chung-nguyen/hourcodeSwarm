@@ -15,12 +15,12 @@ var rollFloat = utils.rollFloat;
 var rollInt = utils.rollInt;
 
 var SMOKE_IMAGES = [
-	"resources/images/particles/particleSmoke1.png",
-	"resources/images/particles/particleSmoke2.png",
-	"resources/images/particles/particleSmoke3.png",
-	"resources/images/particles/particleSmoke4.png",
-	"resources/images/particles/particleSmoke5.png",
-	"resources/images/particles/particleSmoke6.png"
+	"resources/others/particles/particleSmoke1.png",
+	"resources/others/particles/particleSmoke2.png",
+	"resources/others/particles/particleSmoke3.png",
+	"resources/others/particles/particleSmoke4.png",
+	"resources/others/particles/particleSmoke5.png",
+	"resources/others/particles/particleSmoke6.png"
 ];
 
 exports.emitSmallHit = function(engine, entity) {
@@ -119,7 +119,7 @@ exports.emitEpicExplosion = function(engine, entity) {
 		p.anchorY = size / 2;
 		p.width = size;
 		p.height = size;
-		p.image = "resources/images/particles/particleCircle.png";
+		p.image = "resources/others/particles/particleCircle.png";
 		p.compositeOperation = "lighter";
 		if (i === 0) {
 			// giant particle fades over the entire screen

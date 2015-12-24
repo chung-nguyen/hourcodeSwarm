@@ -473,7 +473,7 @@ GLOBAL.setPlayerLives = function (lives) {
 }
 
 GLOBAL.showScore = function () {
-    var scoreTextPath = "resources/images/numbers/";
+    var scoreTextPath = "resources/others/numbers/";
     var scoreTextData = {};
     for (var i = 0; i < 10; i++) {
       scoreTextData[i] = { image: scoreTextPath + "blue_" + i + ".png" };
@@ -496,7 +496,7 @@ GLOBAL.showScore = function () {
 }
 
 GLOBAL.showLives = function () {
-    var scoreTextPath = "resources/images/numbers/";
+    var scoreTextPath = "resources/others/numbers/";
     var scoreTextData = {};
     for (var i = 0; i < 10; i++) {
       scoreTextData[i] = { image: scoreTextPath + "blue_" + i + ".png" };
