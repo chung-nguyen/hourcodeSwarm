@@ -589,9 +589,15 @@ GLOBAL.setPlayerGunPosition = function (x, y) {
     }
 };
 
-GLOBAL.setPlayerGunVelocity = function (vx, vy) {
+GLOBAL.setPlayerGunDirection = function (angle, speed) {
     if (playerBarrels.length > 0) {
-        var gun = playerBarrels[playerBarrels.length - 1];        
+        var gun = playerBarrels[playerBarrels.length - 1];     
+		
+		angle = angle || 0;
+		speed = speed || 1000;
+		var a = angle * Math.PI / 180;
+		var vx = Math.sin(a) * speed;
+		var vy = -Math.cos(a) * speed;
         gun.vx = vx;
         gun.vy = vy;
     }
@@ -717,11 +723,18 @@ GLOBAL.setEnemyTemplateGunPosition = function (name, x, y) {
     }
 }
 
-GLOBAL.setEnemyTemplateGunVelocity = function (name, vx, vy) {
+GLOBAL.setEnemyTemplateGunFixedDirection = function (name, angle, speed) {
     var temp = enemyTemplates[name];
     if (temp && temp.guns.length > 0) {
         var gun = temp.guns[temp.guns.length - 1];
         gun.type = GunType.Fixed;
+		
+		angle = angle || 0;
+		speed = speed || 1000;
+		var a = angle * Math.PI / 180;
+		var vx = Math.sin(a) * speed;
+		var vy = Math.cos(a) * speed;
+		
         gun.vx = vx;
         gun.vy = vy;
     }
@@ -819,14 +832,14 @@ GLOBAL.addEnemy = function (name, x, y, pathName) {
                         
                         var len = vx * vx + vy * vy;
                         if (len > 0) {
-                            len = Math.sqrt(len) / (gunTemplate.speed * 10);
+                            len = Math.sqrt(len) / (gunTemplate.speed);
                             
                             vx /= len;
                             vy /= len;
                         }
                     } else if (gunTemplate.type == GunType.Directional) {
 						var a = gunTemplate.angle + enemy.view.style.r;
-						var d = gunTemplate.speed * 10;
+						var d = gunTemplate.speed;
 						vx = -Math.sin(a) * d;
                         vy = Math.cos(a) * d;
 					} else {

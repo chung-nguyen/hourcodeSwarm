@@ -167,7 +167,6 @@ exports = [
         wait(2000);
     },
 	
-	// Level 7
     function () {
         var x = screenWidth + 100;
         var y = randomY(300, 100);
@@ -226,7 +225,6 @@ exports = [
         wait(6000);
     },
 ];
-
 
 var bossLevel1 = [
 	// Wave 1
