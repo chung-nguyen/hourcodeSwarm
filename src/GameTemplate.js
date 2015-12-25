@@ -560,7 +560,7 @@ GLOBAL.showLives = function () {
     var scoreTextPath = "resources/others/numbers/";
     var scoreTextData = {};
     for (var i = 0; i < 10; i++) {
-      scoreTextData[i] = { image: scoreTextPath + "blue_" + i + ".png" };
+      scoreTextData[i] = { image: scoreTextPath + "time_" + i + ".png" };
     }
     communityart.registerConfig('lives', {
       type: 'ScoreView',
