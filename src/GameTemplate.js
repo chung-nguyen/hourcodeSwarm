@@ -158,12 +158,12 @@ exports.run = function () {
     if (player) {
         scene.screen.onDown(function (point) {
             player.tx = point.x;
-            player.ty = point.y;
+            player.ty = point.y - playerConfig.touchOffsetY;
         });
 
         scene.screen.onMove(function (point) {
             player.tx = point.x;
-            player.ty = point.y;
+            player.ty = point.y - playerConfig.touchOffsetY;
         });
 
         scene.onCollision(player, coins, function (player, coin) {
@@ -452,6 +452,34 @@ GLOBAL.addBackgroundLayer = function (name) {
 	}
 };
 
+GLOBAL.setBackgroundLayerDispersed = function (name, spacing) {
+    var layer = findParallaxLayer(name);
+	if (layer) {        
+        layer.ordered = false;
+        var pieces = layer.pieceOptions;        
+        spacing = spacing || (scene.screen.width / pieces.length);        
+        var x = Math.random() * spacing;
+		for (var i = 0, len = pieces.length; i < len; ++i) {
+            pieces[i].x = x;
+            pieces[i].xAlign = 'center';
+            
+            x += Math.random() * spacing + (spacing / 2);
+        }
+	}
+}
+
+GLOBAL.setBackgroundLayerAlignRight = function (name, noFlip) {
+    var layer = findParallaxLayer(name);
+	if (layer) {
+        var pieces = layer.pieceOptions;        
+		for (var i = 0, len = pieces.length; i < len; ++i) {
+            pieces[i].x = scene.screen.width;
+            pieces[i].xAlign = 'right';
+            pieces[i].flipX = noFlip ? false : true;
+        }
+	}
+}
+
 GLOBAL.setBackgroundLayerRandom = function (name) {
 	var layer = findParallaxLayer(name);
 	if (layer) {
@@ -490,6 +518,7 @@ GLOBAL.addPlayer = function (url) {
     playerConfig.speed = 100;
     playerConfig.offsetY = 100;
     playerConfig.limitY = 100;
+    playerConfig.touchOffsetY = 48;
 }
 
 GLOBAL.setPlayerSize = function (size) {

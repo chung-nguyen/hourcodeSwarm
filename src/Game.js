@@ -15,13 +15,22 @@ exports = function () {
 	setBackgroundLayerSpacing('far', 200, 500);
 	setBackgroundLayerSpeed('far', 200);
 	
-	addBackgroundLayer('mid', 'bg1Debris1');
-	addBackgroundLayer('mid', 'bg1Debris2');
-	addBackgroundLayer('mid', 'bg1Debris3');
-	addBackgroundLayer('mid', 'bg1Debris4');
-	setBackgroundLayerRandom('mid');
-	setBackgroundLayerSpacing('mid', 400, 1000);
-	setBackgroundLayerSpeed('mid', 400);
+	addBackgroundLayer('mid left', 'bg1Debris1');
+	addBackgroundLayer('mid left', 'bg1Debris2');
+	addBackgroundLayer('mid left', 'bg1Debris3');
+	addBackgroundLayer('mid left', 'bg1Debris4');
+	setBackgroundLayerRandom('mid left');
+	setBackgroundLayerSpacing('mid left', 400, 1000);
+	setBackgroundLayerSpeed('mid left', 400);
+    
+    addBackgroundLayer('mid right', 'bg1Debris1');
+	addBackgroundLayer('mid right', 'bg1Debris2');
+	addBackgroundLayer('mid right', 'bg1Debris3');
+	addBackgroundLayer('mid right', 'bg1Debris4');
+	setBackgroundLayerRandom('mid right');
+	setBackgroundLayerSpacing('mid right', 400, 1000);
+	setBackgroundLayerSpeed('mid right', 400);
+    setBackgroundLayerAlignRight('mid right');
     
     addPlayer('player2');
 	setPlayerLives(10);
@@ -69,7 +78,7 @@ exports = function () {
 	addEnemyTemplate('mine', 'crabBaby');
 	setEnemyTemplateSpeed('mine', 15);
 	
-	addEnemyTemplate('boss1', 'cyborg');
+	addEnemyTemplate('boss1', 'monsterking');
 	setEnemyTemplateAutoRotate('boss1', false);
 	setEnemyTemplateBoss('boss1');
 	setEnemyTemplateLives('boss1', 30);
